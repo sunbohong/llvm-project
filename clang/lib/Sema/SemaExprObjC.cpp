@@ -1837,6 +1837,18 @@ bool Sema::CheckMessageArgumentTypes(
                          Args.back()->getEndLoc());
     }
   }
+  
+  for (unsigned i = NumNamedArgs, e = Args.size(); i < e; ++i) {
+    if (Args[i]->isTypeDependent())
+      continue;
+    // copy blocks [NSArray arrayWithObjects:^(){NSLog(@"blk0:%d", val);},^(){NSLog(@"blk1:%d", val);}, nil];
+    if (Args[i]->getType()->isBlockPointerType()) {
+      ExprResult arg = Args[i];
+      maybeExtendBlockObject(arg);
+      Args[i] = arg.get();
+    }
+  }
+
 
   DiagnoseSentinelCalls(Method, SelLoc, Args);
 
