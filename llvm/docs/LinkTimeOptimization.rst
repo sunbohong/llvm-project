@@ -101,7 +101,7 @@ To compile, run:
   < 0`` is always false, which means ``foo3()`` is never used. Hence, the
   optimizer also removes ``foo3()``.
 
-* And this in turn, enables linker to remove ``foo4()``.
+* But ``foo4()`` can't be removed, because it is from native object file.
 
 This example illustrates the advantage of tight integration with the
 linker. Here, the optimizer can not remove ``foo3()`` without the linker's
