@@ -4221,6 +4221,16 @@ void ASTWriter::AddString(StringRef Str, RecordDataImpl &Record) {
 bool ASTWriter::PreparePathForOutput(SmallVectorImpl<char> &Path) {
   assert(Context && "should have context when outputting path");
 
+  SmallString<128> BuiltIn("<built-in>");
+  if (Path == BuiltIn) {
+    return false;
+  }
+  
+  SmallString<128> CommandLine("<command line>");
+  if (Path == CommandLine) {
+    return false;
+  }  
+
   bool Changed =
       cleanPathForOutput(Context->getSourceManager().getFileManager(), Path);
 
